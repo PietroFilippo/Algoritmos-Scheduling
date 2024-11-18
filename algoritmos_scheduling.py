@@ -12,10 +12,10 @@ class GerenciamentoTurnos:
 
     def algoritmo_milp(self):
         "Usa a programação linear inteira mista para resolver"
-        # Cria o problema
+        # Cria o problema com a biblioteca pulp
         prob = pulp.LpProblem("GerenciamentoTurnos", pulp.LpMinimize)
 
-        # Variáveis de decição
+        # Variável de decição
         x = pulp.LpVariable.dicts("turnos",((i, j, t) 
                                            for i in range (self.n_funcionarios)
                                            for j in range (self.n_dias)
@@ -56,7 +56,7 @@ class GerenciamentoTurnos:
         best_fitness = float('inf')
 
         for gen in range(generations):
-            #Avalia a população
+            #Avalia as soluções da população
             fitness_scores = [self._evaluate_solution(sol) for sol in population]
 
             # Atualiza a melhor solução
@@ -87,7 +87,7 @@ class GerenciamentoTurnos:
         return custo_base * multiplicador_fds
     
     def _initialize_population(self, pop_size: int) -> List[np.ndarray]:
-        "Inicializa a população com soluções aleatórias válidas"
+        "Inicializa a população com soluções aleatórias válidas que atendam a demanda minima"
         population = []
         for _ in range(pop_size):
             sol = np.zeros((self.n_funcionarios, self.n_dias, self.n_turnos))
@@ -102,7 +102,7 @@ class GerenciamentoTurnos:
         return population
     
     def _evaluate_solution(self, solution: np.ndarray) -> float:
-        "Avaliar a quantidade da solução considerando os custos e violações"
+        "Avaliar a qualidade da solução considerando os custos e violações"
         custo = 0
         penalidade = 0
 
@@ -141,7 +141,7 @@ class GerenciamentoTurnos:
         return parents
     
     def _crossover(self, parent1: np.ndarray, parent2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-        "Realizar o crossover uniforme"
+        "Realizar o crossover uniforme para gerar duas novas soluções a partir de dois pais"
         mask = np.random.rand(*parent1.shape) < 0.5
         child1 = np.where(mask, parent1, parent2)
         child2 = np.where(mask, parent2, parent1)
