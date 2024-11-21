@@ -171,6 +171,11 @@ if __name__ == "__main__":
     # Demanda minima de cada dia (dia , turno)
     demanda_min = { (j, t): 3 for j in range(n_dias) for t in range(n_turnos) }
 
+    # Exemplo dessa demanda mínima
+    # (0, 0): 3, (0, 1): 3   Dia 0, Turnos 0 e 1
+    # (1, 0): 3, (1, 1): 3   Dia 1, Turnos 0 e 1
+    # (2, 0): 3, (2, 1): 3   Dia 2, Turnos 0 e 1
+
     gerenciador = GerenciamentoTurnos(n_funcionarios, n_dias, n_turnos, demanda_min)
 
 
